@@ -1,7 +1,13 @@
 package com.spacer.rinhaapi.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "CLIENTE")
 public class Cliente {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private Integer limite;
     private Integer saldo;

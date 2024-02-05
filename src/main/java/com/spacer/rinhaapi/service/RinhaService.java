@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 public class RinhaService {
 
     private final ClienteRepository clienteRepository;
-    private final TransacaoContextoStrategy transaccaoService;
+    private final TransacaoService transacaoService;
 
-    public RinhaService(ClienteRepository clienteRepository, TransacaoContextoStrategy transaccaoService) {
+    public RinhaService(ClienteRepository clienteRepository, TransacaoServiceImpl transacaoService) {
         this.clienteRepository = clienteRepository;
-        this.transaccaoService = transaccaoService;
+        this.transacaoService = transacaoService;
     }
 
     public Cliente getClienteById(Integer id) {
@@ -28,10 +28,10 @@ public class RinhaService {
     public TransacaoResponse realizarTransacao(Integer clientId, TransacaoRequest transacao) {
         var cliente =  getClienteById(clientId);
 
-        TransaccaoStrategy transaccaoStrategy = transaccaoService.resolveStrategy(transacao);
-        boolean resultTransacao = transaccaoStrategy.realizarTransacao(cliente, transacao.valor());
+        boolean resultTransacao = transacaoService.realizarTransacao(cliente, transacao.valor(), transacao.tipo());
 
         if (resultTransacao) {
+            clienteRepository.save(cliente);
             return new TransacaoResponse(cliente.getLimite(), cliente.getSaldo());
         } else {
             throw new TransacaoInconsistenteException("Não foi possivel realizar a operação");
