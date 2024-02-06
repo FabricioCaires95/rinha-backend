@@ -2,5 +2,5 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     password: ${DB_PASS}:teste21
-    url: jdbc:postgresql://localhost:5432/rinha_db
     username: ${DB_USERNAME}:rinha_user
+    url: jdbc:postgresql://localhost:5432/rinha_db

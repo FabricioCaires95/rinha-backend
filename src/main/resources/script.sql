@@ -1,17 +1,17 @@
 CREATE TABLE CLIENTE (
-    id bigint AUTO_INCREMENT PRIMARY KEY,
-    limite bigint not null,
-    saldo  bigint not null,
-)
+    id serial PRIMARY KEY,
+    limite integer not null,
+    saldo  integer not null,
+);
 
 CREATE TABLE TRANSACAO (
-    id bigint AUTO_INCREMENT PRIMARY KEY,
-    client_id bigint REFERENCES CLIENTE (id),
-    criado_em timestamp not null,
-    tipo varchar(2) not null,
+    id serial PRIMARY KEY,
+    client_id integer REFERENCES CLIENTE (id),
+    realizado_em timestamp not null default now(),
+    tipo char(1) not null,
     descricao varchar(10) not null,
-    valor bigint not null,
-)
+    valor integer not null,
+);
 
 
 DO $$

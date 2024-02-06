@@ -1,6 +1,11 @@
 package com.spacer.rinhaapi.model;
 
-import jakarta.persistence.*;
+import com.spacer.rinhaapi.model.Cliente;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 
 import java.time.OffsetDateTime;
 
@@ -11,6 +16,8 @@ public class Transacao {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+
+
     private Cliente cliente;
     private OffsetDateTime dataRealizacao;
     private String tipo;
