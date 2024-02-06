@@ -1,11 +1,14 @@
 package com.spacer.rinhaapi.model;
 
-import com.spacer.rinhaapi.model.Cliente;
+
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 import java.time.OffsetDateTime;
 
@@ -16,8 +19,8 @@ public class Transacao {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_id", referencedColumnName = "id")
     private Cliente cliente;
     private OffsetDateTime dataRealizacao;
     private String tipo;

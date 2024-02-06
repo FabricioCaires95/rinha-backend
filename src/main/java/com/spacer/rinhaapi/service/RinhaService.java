@@ -5,8 +5,13 @@ import com.spacer.rinhaapi.controller.TransacaoResponse;
 import com.spacer.rinhaapi.exception.NotFoundException;
 import com.spacer.rinhaapi.exception.TransacaoInconsistenteException;
 import com.spacer.rinhaapi.model.Cliente;
+import com.spacer.rinhaapi.model.Extrato;
+import com.spacer.rinhaapi.model.Saldo;
 import com.spacer.rinhaapi.repository.ClienteRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+
+import java.time.OffsetDateTime;
 
 @Service
 public class RinhaService {
@@ -14,7 +19,7 @@ public class RinhaService {
     private final ClienteRepository clienteRepository;
     private final TransacaoService transacaoService;
 
-    public RinhaService(ClienteRepository clienteRepository, TransacaoServiceImpl transacaoService) {
+    public RinhaService(ClienteRepository clienteRepository, TransacaoService transacaoService) {
         this.clienteRepository = clienteRepository;
         this.transacaoService = transacaoService;
     }
@@ -25,6 +30,7 @@ public class RinhaService {
                 .orElseThrow(() -> new NotFoundException("Cliente nao existe"));
     }
 
+    @Transactional
     public TransacaoResponse realizarTransacao(Integer clientId, TransacaoRequest transacao) {
         var cliente =  getClienteById(clientId);
 
@@ -36,6 +42,16 @@ public class RinhaService {
         } else {
             throw new TransacaoInconsistenteException("Não foi possivel realizar a operação");
         }
+    }
+
+    public Extrato getTransacoesByClientId(Integer clientId) {
+        var cliente = getClienteById(clientId);
+
+        Extrato extrato = transacaoService.findTransacoesByClienteId(clientId);
+        Saldo saldo = new Saldo(cliente.getSaldo(), OffsetDateTime.now(), cliente.getSaldo());
+        extrato.setSaldo(saldo);
+
+        return extrato;
     }
 
 }

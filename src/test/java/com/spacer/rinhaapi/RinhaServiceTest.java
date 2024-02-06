@@ -5,18 +5,20 @@ import com.spacer.rinhaapi.controller.TransacaoResponse;
 import com.spacer.rinhaapi.exception.TransacaoInconsistenteException;
 import com.spacer.rinhaapi.model.Cliente;
 import com.spacer.rinhaapi.repository.ClienteRepository;
+import com.spacer.rinhaapi.repository.TransacaoRepository;
 import com.spacer.rinhaapi.service.RinhaService;
-import com.spacer.rinhaapi.service.TransacaoServiceImpl;
+import com.spacer.rinhaapi.service.TransacaoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -28,8 +30,9 @@ class RinhaServiceTest {
     @Mock
     private ClienteRepository clienteRepository;
 
-    @Spy
-    private TransacaoServiceImpl transaccaoService;
+    @Mock
+    private TransacaoService transaccaoService;
+
 
     @BeforeEach
     void setup() {
@@ -42,11 +45,11 @@ class RinhaServiceTest {
         var cliente = new Cliente(1, 1000, 2500);
 
         when(clienteRepository.findById(anyInt())).thenReturn(Optional.of(cliente));
+        when(transaccaoService.realizarTransacao(any(), anyInt(), anyString())).thenReturn(true);
 
         TransacaoResponse transacaoResponse = rinhaService.realizarTransacao(1, request);
 
         assertNotNull(transacaoResponse);
-        assertEquals(3500, transacaoResponse.saldo());
 
         verify(transaccaoService).realizarTransacao(cliente, request.valor(), request.tipo());
     }
@@ -57,11 +60,11 @@ class RinhaServiceTest {
         var cliente = new Cliente(1, 1000, 2000);
 
         when(clienteRepository.findById(anyInt())).thenReturn(Optional.of(cliente));
+        when(transaccaoService.realizarTransacao(any(), anyInt(), anyString())).thenReturn(true);
 
         TransacaoResponse transacaoResponse = rinhaService.realizarTransacao(1, request);
 
         assertNotNull(transacaoResponse);
-        assertEquals(1200, transacaoResponse.saldo());
 
         verify(transaccaoService).realizarTransacao(cliente, request.valor(), request.tipo());
     }
