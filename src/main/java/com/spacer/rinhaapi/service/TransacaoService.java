@@ -1,17 +1,11 @@
 package com.spacer.rinhaapi.service;
 
 import com.spacer.rinhaapi.model.Cliente;
-import com.spacer.rinhaapi.model.ComparatorData;
 import com.spacer.rinhaapi.model.Extrato;
 import com.spacer.rinhaapi.model.Transacao;
 import com.spacer.rinhaapi.model.TransacaoResponse;
 import com.spacer.rinhaapi.repository.TransacaoRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 @Service
 public class TransacaoService {
@@ -58,7 +52,8 @@ public class TransacaoService {
         var transacoes = transacaoRepository.findTransacaoByClientId(clienteId)
                 .stream()
                 .map(this::fromTransacaoToResponse)
-                .sorted(new ComparatorData())
+                //.sorted(new ComparatorData())
+                .sorted(TransacaoResponse::compareTo)
                 .toList();
 
         Extrato extrato = new Extrato();

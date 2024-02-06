@@ -1,8 +1,10 @@
 package com.spacer.rinhaapi;
 
 import com.spacer.rinhaapi.model.Cliente;
+import com.spacer.rinhaapi.model.ComparatorData;
 import com.spacer.rinhaapi.model.Extrato;
 import com.spacer.rinhaapi.model.Transacao;
+import com.spacer.rinhaapi.model.TransacaoResponse;
 import com.spacer.rinhaapi.repository.TransacaoRepository;
 import com.spacer.rinhaapi.service.TransacaoService;
 import org.junit.jupiter.api.BeforeEach;
@@ -98,11 +100,30 @@ class TransacaoServiceTest {
         transacoes.add(t1);
         transacoes.add(t2);
 
+
         when(transacaoRepository.findTransacaoByClientId(anyInt())).thenReturn(transacoes);
 
         Extrato extrato = transacaoService.findTransacoesByClienteId(10);
 
         assertNotNull(extrato);
         assertEquals(2, extrato.getUltimasTransacoes().size());
+        assertEquals("d", extrato.getUltimasTransacoes().get(0).tipo());
+    }
+
+    @Test
+    void testarOrderDasTransacoes() {
+        var t1 = new TransacaoResponse(200, "c", "t1", OffsetDateTime.now());
+        var t2 = new TransacaoResponse(50, "d", "t2", OffsetDateTime.now().plusHours(3));
+        var t3 = new TransacaoResponse(150, "c", "t3", OffsetDateTime.now().plusHours(1));
+
+        List<TransacaoResponse> transacaoResponses = new ArrayList<>();
+        transacaoResponses.add(t1);
+        transacaoResponses.add(t2);
+        transacaoResponses.add(t3);
+
+        transacaoResponses.sort(new ComparatorData());
+
+        assertNotNull(transacaoResponses);
+        assertEquals("t2", transacaoResponses.get(0).descricao());
     }
 }
