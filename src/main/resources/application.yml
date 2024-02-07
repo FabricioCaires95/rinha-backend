@@ -1,6 +1,13 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    password: ${DB_PASS}:teste21
-    username: ${DB_USERNAME}:rinha_user
+    password: ${DB_PASS:admin123}
+    username: ${DB_USERNAME:postgres}
     url: jdbc:postgresql://localhost:5432/rinha_db
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+    defer-datasource-initialization: true

@@ -49,7 +49,7 @@ public class TransacaoService {
 
 
     public Extrato findTransacoesByClienteId(Integer clienteId) {
-        var transacoes = transacaoRepository.findTransacaoByClientId(clienteId)
+        var transacoes = transacaoRepository.findTransacaoByCliente_Id(clienteId)
                 .stream()
                 .map(this::fromTransacaoToResponse)
                 //.sorted(new ComparatorData())
