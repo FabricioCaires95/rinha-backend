@@ -1,5 +1,6 @@
 package com.spacer.rinhaapi.service;
 
+import com.spacer.rinhaapi.controller.TransacaoRequest;
 import com.spacer.rinhaapi.model.Cliente;
 import com.spacer.rinhaapi.model.Extrato;
 import com.spacer.rinhaapi.model.Transacao;
@@ -64,6 +65,11 @@ public class TransacaoService {
 
     private TransacaoResponse fromTransacaoToResponse(Transacao transacao) {
         return new TransacaoResponse(transacao.getValor(), transacao.getTipo(), transacao.getDescricao(), transacao.getDataRealizacao());
+    }
+
+    public void salvarTransacao(Cliente cliente, TransacaoRequest transacaoRequest) {
+        var transacao = transacaoRequest.toTransacao(transacaoRequest, cliente);
+        transacaoRepository.save(transacao);
     }
 
 

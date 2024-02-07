@@ -101,7 +101,7 @@ class TransacaoServiceTest {
         transacoes.add(t2);
 
 
-        when(transacaoRepository.findTransacaoByClientId(anyInt())).thenReturn(transacoes);
+        when(transacaoRepository.findTransacaoByCliente_Id(anyInt())).thenReturn(transacoes);
 
         Extrato extrato = transacaoService.findTransacoesByClienteId(10);
 

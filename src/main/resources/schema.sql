@@ -7,7 +7,7 @@ CREATE TABLE CLIENTE (
 CREATE TABLE TRANSACAO (
     id serial PRIMARY KEY,
     client_id integer REFERENCES CLIENTE (id),
-    realizado_em timestamp not null default now(),
+    realizado_em TIMESTAMP NOT NULL DEFAULT now(),
     tipo char(1) not null,
     descricao varchar(10) not null,
     valor integer not null

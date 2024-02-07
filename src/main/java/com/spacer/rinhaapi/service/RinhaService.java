@@ -30,7 +30,8 @@ public class RinhaService {
                 .orElseThrow(() -> new NotFoundException("Cliente nao existe"));
     }
 
-    @Transactional
+
+    @Transactional(rollbackOn = Exception.class)
     public TransacaoResponse realizarTransacao(Integer clientId, TransacaoRequest transacao) {
         var cliente =  getClienteById(clientId);
 
@@ -38,6 +39,7 @@ public class RinhaService {
 
         if (resultTransacao) {
             clienteRepository.save(cliente);
+            transacaoService.salvarTransacao(cliente, transacao);
             return new TransacaoResponse(cliente.getLimite(), cliente.getSaldo());
         } else {
             throw new TransacaoInconsistenteException("Não foi possivel realizar a operação");

@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 public class Cliente {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private Integer limite;
     private Integer saldo;
