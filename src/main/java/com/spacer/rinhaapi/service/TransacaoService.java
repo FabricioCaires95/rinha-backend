@@ -1,6 +1,5 @@
 package com.spacer.rinhaapi.service;
 
-import com.spacer.rinhaapi.controller.TransacaoRequest;
 import com.spacer.rinhaapi.model.Cliente;
 import com.spacer.rinhaapi.model.Extrato;
 import com.spacer.rinhaapi.model.Transacao;
@@ -43,8 +42,10 @@ public class TransacaoService {
     public boolean realizarTransacao(Cliente cliente, Integer valor, String tipoTransacao) {
         if (tipoTransacao.equalsIgnoreCase("c")) {
             return creditar(cliente, valor);
-        } else {
+        } else if (tipoTransacao.equalsIgnoreCase("d")) {
             return debitar(cliente, valor);
+        } else {
+            return false;
         }
     }
 
@@ -53,8 +54,8 @@ public class TransacaoService {
         var transacoes = transacaoRepository.findTransacaoByCliente_Id(clienteId)
                 .stream()
                 .map(this::fromTransacaoToResponse)
-                //.sorted(new ComparatorData())
                 .sorted(TransacaoResponse::compareTo)
+                .limit(10)
                 .toList();
 
         Extrato extrato = new Extrato();
@@ -67,8 +68,7 @@ public class TransacaoService {
         return new TransacaoResponse(transacao.getValor(), transacao.getTipo(), transacao.getDescricao(), transacao.getDataRealizacao());
     }
 
-    public void salvarTransacao(Cliente cliente, TransacaoRequest transacaoRequest) {
-        var transacao = transacaoRequest.toTransacao(transacaoRequest, cliente);
+    public void salvarTransacao(Transacao transacao) {
         transacaoRepository.save(transacao);
     }
 

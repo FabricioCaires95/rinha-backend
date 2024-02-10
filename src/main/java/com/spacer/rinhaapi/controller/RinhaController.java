@@ -3,10 +3,14 @@ package com.spacer.rinhaapi.controller;
 
 import com.spacer.rinhaapi.model.Extrato;
 import com.spacer.rinhaapi.service.RinhaService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/clientes")
@@ -19,7 +23,7 @@ public class RinhaController {
     }
 
     @PostMapping("/{id}/transacoes")
-    public ResponseEntity<TransacaoResponse> createTransaction(@PathVariable Integer id, @RequestBody TransacaoRequest transacaoRequest) {
+    public ResponseEntity<TransacaoResponse> createTransaction(@PathVariable Integer id, @RequestBody @Valid TransacaoRequest transacaoRequest) {
         return ResponseEntity.ok(rinhaService.realizarTransacao(id, transacaoRequest));
     }
 

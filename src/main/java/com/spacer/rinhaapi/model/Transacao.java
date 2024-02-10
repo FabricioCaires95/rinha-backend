@@ -1,7 +1,15 @@
 package com.spacer.rinhaapi.model;
 
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 import java.time.OffsetDateTime;
 
@@ -26,6 +34,13 @@ public class Transacao {
 
     public Transacao(Cliente cliente, Integer valor, String tipo, String descricao) {
         this.cliente = cliente;
+        this.tipo = tipo;
+        this.descricao = descricao;
+        this.valor = valor;
+        this.dataRealizacao = OffsetDateTime.now();
+    }
+
+    public Transacao(Integer valor, String tipo, String descricao) {
         this.tipo = tipo;
         this.descricao = descricao;
         this.valor = valor;

@@ -38,8 +38,7 @@ public class RinhaService {
         boolean resultTransacao = transacaoService.realizarTransacao(cliente, transacao.valor(), transacao.tipo());
 
         if (resultTransacao) {
-            clienteRepository.save(cliente);
-            transacaoService.salvarTransacao(cliente, transacao);
+            transacaoService.salvarTransacao(transacao.toTransacao(transacao, cliente));
             return new TransacaoResponse(cliente.getLimite(), cliente.getSaldo());
         } else {
             throw new TransacaoInconsistenteException("Não foi possivel realizar a operação");
@@ -47,10 +46,10 @@ public class RinhaService {
     }
 
     public Extrato getTransacoesByClientId(Integer clientId) {
-        var cliente = getClienteById(clientId);
+        final var cliente = getClienteById(clientId);
 
         Extrato extrato = transacaoService.findTransacoesByClienteId(clientId);
-        Saldo saldo = new Saldo(cliente.getSaldo(), OffsetDateTime.now(), cliente.getSaldo());
+        Saldo saldo = new Saldo(cliente.getSaldo(), OffsetDateTime.now(), cliente.getLimite());
         extrato.setSaldo(saldo);
 
         return extrato;

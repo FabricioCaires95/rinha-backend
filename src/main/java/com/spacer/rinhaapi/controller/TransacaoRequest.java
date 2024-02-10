@@ -10,6 +10,6 @@ public record TransacaoRequest(@NotNull(message = "this field is required") Inte
                                @NotNull(message = "this field is required")
                                @Size(min = 1, max = 10, message = "size error") String descricao) {
     public Transacao toTransacao(TransacaoRequest transacaoRequest, Cliente cliente) {
-        return new Transacao(cliente,transacaoRequest.valor, transacaoRequest.tipo, transacaoRequest.descricao);
+        return new Transacao(cliente, transacaoRequest.valor, transacaoRequest.tipo, transacaoRequest.descricao);
     }
 }
