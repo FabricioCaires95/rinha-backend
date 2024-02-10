@@ -41,7 +41,7 @@ class TransacaoServiceTest {
     void testarMethodoCreditarSucesso() {
         var cliente = new Cliente(1, 1000, 2500);
 
-        boolean result = transacaoService.realizarTransacao(cliente, 1000, "c");
+        boolean result = transacaoService.debitarCreditar(cliente, 1000, "c");
 
         assertTrue(result);
         assertEquals(3500, cliente.getSaldo());
@@ -51,7 +51,7 @@ class TransacaoServiceTest {
     void testarMethodoCreditarComValorInvalido() {
         var cliente = new Cliente(1, 1000, 2500);
 
-        boolean result = transacaoService.realizarTransacao(cliente, -50, "c");
+        boolean result = transacaoService.debitarCreditar(cliente, -50, "c");
 
         assertFalse(result);
         assertEquals(2500, cliente.getSaldo());
@@ -61,7 +61,7 @@ class TransacaoServiceTest {
     void testarMethodDebitarSucesso() {
         var cliente = new Cliente(1, 1000, 2500);
 
-        boolean result = transacaoService.realizarTransacao(cliente, 700, "d");
+        boolean result = transacaoService.debitarCreditar(cliente, 700, "d");
 
         assertTrue(result);
         assertEquals(1800, cliente.getSaldo());
@@ -71,7 +71,7 @@ class TransacaoServiceTest {
     void testarMethodDebitarComInconsistenciaValor() {
         var cliente = new Cliente(1, 1000, 2500);
 
-        boolean result = transacaoService.realizarTransacao(cliente, 2000, "d");
+        boolean result = transacaoService.debitarCreditar(cliente, 2000, "d");
 
         assertFalse(result);
         assertEquals(2500, cliente.getSaldo());

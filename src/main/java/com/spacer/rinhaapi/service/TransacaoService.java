@@ -39,7 +39,7 @@ public class TransacaoService {
     }
 
 
-    public boolean realizarTransacao(Cliente cliente, Integer valor, String tipoTransacao) {
+    public boolean debitarCreditar(Cliente cliente, Integer valor, String tipoTransacao) {
         if (tipoTransacao.equalsIgnoreCase("c")) {
             return creditar(cliente, valor);
         } else if (tipoTransacao.equalsIgnoreCase("d")) {

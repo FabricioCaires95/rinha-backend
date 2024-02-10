@@ -33,9 +33,9 @@ public class RinhaService {
 
     @Transactional(rollbackOn = Exception.class)
     public TransacaoResponse realizarTransacao(Integer clientId, TransacaoRequest transacao) {
-        var cliente =  getClienteById(clientId);
+        final var cliente =  getClienteById(clientId);
 
-        boolean resultTransacao = transacaoService.realizarTransacao(cliente, transacao.valor(), transacao.tipo());
+        boolean resultTransacao = transacaoService.debitarCreditar(cliente, transacao.valor(), transacao.tipo());
 
         if (resultTransacao) {
             transacaoService.salvarTransacao(transacao.toTransacao(transacao, cliente));
@@ -53,6 +53,11 @@ public class RinhaService {
         extrato.setSaldo(saldo);
 
         return extrato;
+    }
+
+    public int alterarSaldo(Integer saldoAtual, Integer valor) {
+        
+        return 0;
     }
 
 }
