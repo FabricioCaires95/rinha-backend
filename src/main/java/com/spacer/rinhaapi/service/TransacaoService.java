@@ -16,7 +16,7 @@ public class TransacaoService {
         this.transacaoRepository = transacaoRepository;
     }
 
-    public boolean creditar(Cliente cliente, Integer valor) {
+    synchronized public boolean creditar(Cliente cliente, Integer valor) {
         if (valor < 0 ) {
             return false;
         }
@@ -24,7 +24,7 @@ public class TransacaoService {
         return true;
     }
 
-    public boolean debitar(Cliente cliente, Integer valor) {
+    synchronized public boolean debitar(Cliente cliente, Integer valor) {
         if (valor < 0 ) {
             return false;
         }
