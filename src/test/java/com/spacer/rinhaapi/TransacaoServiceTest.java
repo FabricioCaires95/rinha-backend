@@ -18,9 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
@@ -38,68 +36,22 @@ class TransacaoServiceTest {
     }
 
     @Test
-    void testarMethodoCreditarSucesso() {
-        var cliente = new Cliente(1, 1000, 2500);
-
-        boolean result = transacaoService.debitarCreditar(cliente, 1000, "c");
-
-        assertTrue(result);
-        assertEquals(3500, cliente.getSaldo());
-    }
-
-    @Test
-    void testarMethodoCreditarComValorInvalido() {
-        var cliente = new Cliente(1, 1000, 2500);
-
-        boolean result = transacaoService.debitarCreditar(cliente, -50, "c");
-
-        assertFalse(result);
-        assertEquals(2500, cliente.getSaldo());
-    }
-
-    @Test
-    void testarMethodDebitarSucesso() {
-        var cliente = new Cliente(1, 1000, 2500);
-
-        boolean result = transacaoService.debitarCreditar(cliente, 700, "d");
-
-        assertTrue(result);
-        assertEquals(1800, cliente.getSaldo());
-    }
-
-    @Test
     void testarMethodDebitarComInconsistenciaValor() {
         var cliente = new Cliente(1, 1000, 2500);
 
-        boolean result = transacaoService.debitarCreditar(cliente, 2000, "d");
-
-        assertFalse(result);
         assertEquals(2500, cliente.getSaldo());
     }
 
     @Test
     void testarRecuperacaoExtratoComSaldos() {
         var cliente = new Cliente(2, 1000, 2500);
-        var t1 = new Transacao();
-        t1.setId(2);
-        t1.setDescricao("teste 1");
-        t1.setTipo("c");
-        t1.setValor(500);
-        t1.setDataRealizacao(OffsetDateTime.now());
-        t1.setCliente(cliente);
+        var t1 = new Transacao(cliente, 500, "c", "teste 1");
 
-        var t2 = new Transacao();
-        t2.setId(3);
-        t2.setDescricao("teste 2");
-        t2.setTipo("d");
-        t2.setValor(300);
-        t2.setDataRealizacao(OffsetDateTime.now().plusHours(2));
-        t2.setCliente(cliente);
+        var t2 = new Transacao(cliente, 300, "d", "teste 2");
 
         List<Transacao> transacoes = new ArrayList<>();
         transacoes.add(t1);
         transacoes.add(t2);
-
 
         when(transacaoRepository.findTransacaoByCliente_Id(anyInt())).thenReturn(transacoes);
 

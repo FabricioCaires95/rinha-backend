@@ -15,7 +15,7 @@ import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "TRANSACAO")
-public class Transacao {
+public final class Transacao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,47 +51,24 @@ public class Transacao {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public Cliente getCliente() {
         return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
     }
 
     public OffsetDateTime getDataRealizacao() {
         return dataRealizacao;
     }
 
-    public void setDataRealizacao(OffsetDateTime dataRealizacao) {
-        this.dataRealizacao = dataRealizacao;
-    }
-
     public String getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
 
     public String getDescricao() {
         return descricao;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
     public Integer getValor() {
         return valor;
-    }
-
-    public void setValor(Integer valor) {
-        this.valor = valor;
     }
 }

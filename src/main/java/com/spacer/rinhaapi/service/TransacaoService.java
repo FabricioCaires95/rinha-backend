@@ -1,6 +1,5 @@
 package com.spacer.rinhaapi.service;
 
-import com.spacer.rinhaapi.model.Cliente;
 import com.spacer.rinhaapi.model.Extrato;
 import com.spacer.rinhaapi.model.Transacao;
 import com.spacer.rinhaapi.model.TransacaoResponse;
@@ -15,40 +14,6 @@ public class TransacaoService {
     public TransacaoService(TransacaoRepository transacaoRepository) {
         this.transacaoRepository = transacaoRepository;
     }
-
-    synchronized public boolean creditar(Cliente cliente, Integer valor) {
-        if (valor < 0 ) {
-            return false;
-        }
-        cliente.setSaldo(cliente.getSaldo() + valor);
-        return true;
-    }
-
-    synchronized public boolean debitar(Cliente cliente, Integer valor) {
-        if (valor < 0 ) {
-            return false;
-        }
-        var saldoAtual = cliente.getSaldo() - valor;
-
-        if (saldoAtual < cliente.getLimite()) {
-            return false;
-        } else {
-            cliente.setSaldo(saldoAtual);
-            return true;
-        }
-    }
-
-
-    public boolean debitarCreditar(Cliente cliente, Integer valor, String tipoTransacao) {
-        if (tipoTransacao.equalsIgnoreCase("c")) {
-            return creditar(cliente, valor);
-        } else if (tipoTransacao.equalsIgnoreCase("d")) {
-            return debitar(cliente, valor);
-        } else {
-            return false;
-        }
-    }
-
 
     public Extrato findTransacoesByClienteId(Integer clienteId) {
         var transacoes = transacaoRepository.findTransacaoByCliente_Id(clienteId)

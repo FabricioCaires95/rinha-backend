@@ -35,14 +35,20 @@ public class RinhaService {
     public TransacaoResponse realizarTransacao(Integer clientId, TransacaoRequest transacao) {
         final var cliente =  getClienteById(clientId);
 
-        boolean resultTransacao = transacaoService.debitarCreditar(cliente, transacao.valor(), transacao.tipo());
+        int newSaldo;
 
-        if (resultTransacao) {
-            transacaoService.salvarTransacao(transacao.toTransacao(transacao, cliente));
-            return new TransacaoResponse(cliente.getLimite(), cliente.getSaldo());
+        if (transacao.tipo().equalsIgnoreCase("c")) {
+            newSaldo = creditar(cliente, transacao.valor());
+        } else if (transacao.tipo().equalsIgnoreCase("d")) {
+            newSaldo = debitar(cliente, transacao.valor());
         } else {
-            throw new TransacaoInconsistenteException("Não foi possivel realizar a operação");
+            throw new TransacaoInconsistenteException("Tipo de transação inválido");
         }
+
+        var clienteAtualizado = new Cliente(cliente.getId(), cliente.getLimite(), newSaldo);
+        clienteRepository.save(clienteAtualizado);
+        transacaoService.salvarTransacao(transacao.toTransacao(transacao, clienteAtualizado));
+        return new TransacaoResponse(clienteAtualizado.getLimite(), clienteAtualizado.getSaldo());
     }
 
     public Extrato getTransacoesByClientId(Integer clientId) {
@@ -55,9 +61,27 @@ public class RinhaService {
         return extrato;
     }
 
-    public int alterarSaldo(Integer saldoAtual, Integer valor) {
-        
-        return 0;
+    public int creditar(Cliente cliente, Integer valor) {
+        validarValor(valor);
+        return cliente.getSaldo() + valor;
+    }
+
+    public int debitar(Cliente cliente, Integer valor) {
+        validarValor(valor);
+
+        var saldoFinal = cliente.getSaldo() - valor;
+
+        if (saldoFinal < cliente.getLimite()) {
+            throw new TransacaoInconsistenteException("Saldo insuficiente");
+        } else {
+            return saldoFinal;
+        }
+    }
+
+    private static void validarValor(Integer valor) {
+        if (valor < 0 ) {
+            throw new TransacaoInconsistenteException("Valor negativo");
+        }
     }
 
 }

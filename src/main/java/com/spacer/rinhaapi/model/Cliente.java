@@ -8,7 +8,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "CLIENTE")
-public class Cliente {
+public final class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,24 +29,12 @@ public class Cliente {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public Integer getLimite() {
         return limite;
     }
 
-    public void setLimite(Integer limite) {
-        this.limite = limite;
-    }
-
     public Integer getSaldo() {
         return saldo;
-    }
-
-    public void setSaldo(Integer saldo) {
-        this.saldo = saldo;
     }
 
     @Override
