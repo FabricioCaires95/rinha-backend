@@ -11,7 +11,7 @@ RUN ./mvnw clean package -DskipTests
 
 FROM openjdk:21-jdk-slim as RUNTIME
 
-COPY --from=BUILD /app/target/rinha-backend-0.0.1-SNAPSHOT.jar /rinha.jar
+COPY --from=BUILD /app/target/rinha-api-0.0.1-SNAPSHOT.jar /rinha.jar
 
 EXPOSE 8080
 
